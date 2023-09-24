@@ -1,15 +1,17 @@
 #include "Textures.hpp"
 #include "stb_image.h"
+#include <cstdlib>
+#include <format>
+#include <stdexcept>
 
 Texture::Texture(const char *image, GLenum textureType, GLenum slot,
-                 GLenum pixelType) noexcept
+                 GLenum pixelType)
     : _type(textureType), _textureUnit(slot) {
-  int widthImg, heightImg, numberOfColorChanels;
+
+  int widthImg, heightImg, numberOfColorChannels;
   GLubyte *bytes =
-      stbi_load(image, &widthImg, &heightImg, &numberOfColorChanels, 0);
-  std::cout << widthImg << "-------------\n";
-  std::cout << heightImg << "-------------\n";
-  std::cout << numberOfColorChanels << "------end-------\n";
+      stbi_load(image, &widthImg, &heightImg, &numberOfColorChannels, 0);
+
   if (bytes) {
     glGenTextures(1, &_ID);
     glActiveTexture(slot);
@@ -23,13 +25,18 @@ Texture::Texture(const char *image, GLenum textureType, GLenum slot,
     glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    GLenum format = GL_RGBA;
-    if (numberOfColorChanels == 3) {
+    GLenum format;
+    switch (numberOfColorChannels) {
+    case 3: {
       format = GL_RGB;
-      std::cout << image << " has format GL_RGB \n";
-    } else {
+    } break;
+    case 4: {
       format = GL_RGBA;
-      std::cout << image << " has format GL_RGBA \n";
+    } break;
+    default: {
+      throw std::runtime_error(
+          std::format("Texture format not supported for {}", image));
+    } break;
     }
 
     glTexImage2D(textureType, 0, GL_RGBA, widthImg, heightImg, 0, format,
@@ -39,12 +46,14 @@ Texture::Texture(const char *image, GLenum textureType, GLenum slot,
     stbi_image_free(bytes);
     glBindTexture(textureType, 0);
   } else {
-    std::cout << "texture " << image << " not loaded " << std::endl;
+    throw std::runtime_error(
+        std::format("Texture {} could not be loaded", image));
   }
 }
 
 auto Texture::setTextureUnit(Shader &shaderProgram, const char *uniformName,
                              GLint unit) const noexcept -> void {
+
   shaderProgram.activate();
   glUniform1i(glGetUniformLocation(shaderProgram.getID(), uniformName), unit);
   shaderProgram.deActivate();
@@ -53,6 +62,7 @@ auto Texture::setTextureUnit(Shader &shaderProgram, const char *uniformName,
 auto Texture::bind() const noexcept -> void { glBindTexture(_type, _ID); }
 
 auto Texture::activate() const noexcept -> void {
+
   glActiveTexture(_textureUnit);
 }
 
@@ -61,5 +71,6 @@ auto Texture::unBind() const noexcept -> void { glBindTexture(_type, 0); }
 auto Texture::deActivate() const noexcept -> void { glDisable(_textureUnit); }
 
 auto Texture::deleteTexture() const noexcept -> void {
+
   glDeleteTextures(1, &_ID);
 }

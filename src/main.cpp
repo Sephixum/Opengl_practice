@@ -10,6 +10,7 @@
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <cmath>
+#include <format>
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
@@ -90,11 +91,18 @@ auto main() -> int {
 
   vertexAttributes.unBind();
 
-  stbi_set_flip_vertically_on_load(true);
-  Texture pop_catTexture("resources/textures/3.png", GL_TEXTURE_2D, GL_TEXTURE0,
-                         GL_UNSIGNED_BYTE);
-  Texture smilingEmoji("resources/textures/2.png", GL_TEXTURE_2D, GL_TEXTURE1,
-                       GL_UNSIGNED_BYTE);
+  Texture pop_catTexture;
+  Texture smilingEmoji;
+  try {
+    stbi_set_flip_vertically_on_load(true);
+    pop_catTexture = Texture("resources/textures/3.png", GL_TEXTURE_2D,
+                             GL_TEXTURE0, GL_UNSIGNED_BYTE);
+    smilingEmoji = Texture("resources/textures/2.png", GL_TEXTURE_2D,
+                           GL_TEXTURE1, GL_UNSIGNED_BYTE);
+  } catch (std::runtime_error &e) {
+    std::cout << std::format("Caught and exception : {}",e.what()) << std::endl;
+    std::exit(1);
+  }
 
   pop_catTexture.setTextureUnit(shaderProgram, "tex0", 0);
   smilingEmoji.setTextureUnit(shaderProgram, "tex1", 1);
@@ -121,7 +129,8 @@ auto main() -> int {
     pop_catTexture.bind();
     smilingEmoji.activate();
     smilingEmoji.bind();
-    camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
+    camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram,
+                             "cameraMatrix");
     camera.processInput(window);
 
     // render stuff

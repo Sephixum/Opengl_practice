@@ -10,12 +10,13 @@ private:
   GLenum _textureUnit;
 
 public:
-  explicit Texture(const char *, GLenum, GLenum, GLenum) noexcept;
+  explicit Texture() = default;
+  explicit Texture(const char *, GLenum, GLenum, GLenum);
 
-  void setTextureUnit(Shader &, const char *, GLint) const noexcept;
-  void bind() const noexcept;
-  void activate() const noexcept;
-  void unBind() const noexcept;
-  void deActivate() const noexcept;
-  void deleteTexture() const noexcept;
+  auto setTextureUnit(Shader &, const char *, GLint) const noexcept -> void;
+  auto bind() const noexcept -> void;
+  auto activate() const noexcept -> void;
+  auto unBind() const noexcept -> void;
+  auto deActivate() const noexcept -> void;
+  auto deleteTexture() const noexcept -> void;
 };
