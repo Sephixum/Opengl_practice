@@ -121,7 +121,7 @@ auto main() -> int {
     pop_catTexture.bind();
     smilingEmoji.activate();
     smilingEmoji.bind();
-    camera.matrix(66.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
+    camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
     camera.processInput(window);
 
     // render stuff
