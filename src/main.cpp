@@ -144,17 +144,18 @@ auto main() -> int {
   pop_catTexture.bind();
   smilingEmoji.activate();
   smilingEmoji.bind();
-  camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
 
   while (!glfwWindowShouldClose(window)) {
-    processInput(window);
 
+    processInput(window);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     camera.processInput(window);
     camera.cameraUpdate(window);
+    camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram,
+                             "cameraMatrix");
 
     // render stuff
     vertexAttributes.bind();
