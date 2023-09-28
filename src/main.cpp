@@ -100,7 +100,8 @@ auto main() -> int {
     smilingEmoji = Texture("resources/textures/2.png", GL_TEXTURE_2D,
                            GL_TEXTURE1, GL_UNSIGNED_BYTE);
   } catch (std::runtime_error &e) {
-    std::cout << std::format("Caught and exception : {}",e.what()) << std::endl;
+    std::cout << std::format("Caught and exception : {}", e.what())
+              << std::endl;
     std::exit(1);
   }
 

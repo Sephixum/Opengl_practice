@@ -13,8 +13,11 @@
 
 class Camera {
 private:
-  float _rotationByX;
-  float _rotationByY;
+  int _width;
+  int _height;
+
+  float _pitch;
+  float _yaw;
 
   bool _firstMove;
 
@@ -23,7 +26,11 @@ private:
   float _lastX;
   float _lastY;
 
+  float _speed;
+
   glm::vec3 _cameraUp;
+  glm::vec3 _cameraPosition;
+  glm::vec3 _cameraOrientation;
 
 public:
   explicit Camera(int width, int height, glm::vec3 position,
@@ -34,10 +41,5 @@ public:
       -> void;
   auto processInput(GLFWwindow *) noexcept -> void;
 
-  glm::vec3 cameraPosition;
-  glm::vec3 cameraOrientation;
 
-  int width;
-  int height;
-  float speed;
 };

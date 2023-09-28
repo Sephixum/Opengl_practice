@@ -1,26 +1,36 @@
 #include "Camera.hpp"
 #include "Globals.hpp"
+#include <cmath>
 #include <format>
 
 Camera::Camera(int width, int height, glm::vec3 position,
                GLFWwindow *window) noexcept
-    : width(width), height(height), cameraPosition(position) {
+    : _width(width), _height(height), _cameraPosition(position) {
+
+  _firstMove = true;
+
+  _pitch = 0.0f;
+  _yaw = -90.0f;
+
+  _speed = 0.1f;
+  _sensitivity = 0.1f;
+
+  _lastX = 0.0f;
+  _lastY = 0.0f;
 
   _cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-  cameraOrientation = glm::vec3(0.0f, 0.0f, -1.0f);
-  speed = 0.1f;
-  _sensitivity = 2.5f;
-  _firstMove = true;
+  _cameraOrientation = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
 auto Camera::setMatrixToShader(float FOV, float nearPlane, float farPlane,
                                Shader &shaderProgram,
                                const char *uniform) noexcept -> void {
 
-  auto projection = glm::perspective(
-      glm::radians(FOV), static_cast<float>(width) / static_cast<float>(height),
-      nearPlane, farPlane);
-  auto view = glm::lookAt(cameraPosition, cameraPosition + cameraOrientation,
+  auto projection =
+      glm::perspective(glm::radians(FOV),
+                       static_cast<float>(_width) / static_cast<float>(_height),
+                       nearPlane, farPlane);
+  auto view = glm::lookAt(_cameraPosition, _cameraPosition + _cameraOrientation,
                           _cameraUp);
 
   glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), uniform), 1,
@@ -30,81 +40,72 @@ auto Camera::setMatrixToShader(float FOV, float nearPlane, float farPlane,
 auto Camera::processInput(GLFWwindow *window) noexcept -> void {
 
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-    cameraPosition += speed * cameraOrientation;
+    _cameraPosition += _speed * _cameraOrientation;
   }
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-    cameraPosition -= speed * cameraOrientation;
+    _cameraPosition -= _speed * _cameraOrientation;
   }
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-    cameraPosition +=
-        speed * glm::normalize(glm::cross(_cameraUp, cameraOrientation));
+    _cameraPosition +=
+        _speed * glm::normalize(glm::cross(_cameraUp, _cameraOrientation));
   }
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-    cameraPosition -=
-        speed * glm::normalize(glm::cross(_cameraUp, cameraOrientation));
+    _cameraPosition -=
+        _speed * glm::normalize(glm::cross(_cameraUp, _cameraOrientation));
   }
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-    cameraPosition += speed * _cameraUp;
+    _cameraPosition += _speed * _cameraUp;
   }
   if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-    cameraPosition -= speed * _cameraUp;
+    _cameraPosition -= _speed * _cameraUp;
   }
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-    speed = 0.3f;
+    _speed = 0.3f;
   } else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) {
-    speed = 0.1f;
+    _speed = 0.1f;
   }
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     double xMousePos;
     double yMousePos;
     glfwGetCursorPos(window, &xMousePos, &yMousePos);
 
+    float xPos = static_cast<float>(xMousePos);
+    float yPos = static_cast<float>(yMousePos);
+
     if (_firstMove) {
-      _lastX = xMousePos;
-      _lastY = yMousePos;
+      _lastX = xPos;
+      _lastY = yPos;
       _firstMove = false;
     }
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    float xOffSet = xMousePos - _lastX;
-    float yOffSet = yMousePos - _lastY;
+    float xOffset = xPos - _lastX;
+    float yOffset = _lastY - yPos;
 
-    _lastX = xMousePos;
-    _lastY = yMousePos;
+    _lastX = xPos;
+    _lastY = yPos;
 
-    xOffSet *= speed;
-    yOffSet *= speed;
+    xOffset *= _sensitivity;
+    yOffset *= _sensitivity;
 
-    _rotationByY += xOffSet;
-    _rotationByX += yOffSet;
+    _yaw += xOffset;
+    _pitch += yOffset;
 
-    if (_rotationByX > 89.f) {
-      yOffSet = 0;
-      _rotationByX = 89.f;
+    if (_pitch > 89.0f) {
+      _pitch = 89.0f;
     }
-    if (_rotationByX < -89.f) {
-      yOffSet = 0;
-      _rotationByX = -89.f;
+    if (_pitch < -89.0f) {
+      _pitch = -89.0f;
     }
-    if (_rotationByY > 360.f) {
-      xOffSet = 0;
-      _rotationByY = 0;
-    }
-    if (_rotationByY < -360.f) {
-      xOffSet = 0;
-      _rotationByY = 0;
-    }
-    glm::vec3 cameraRight =
-        glm::normalize(glm::cross(cameraOrientation, _cameraUp));
-    glm::vec3 _cameraUp =
-        glm::normalize(glm::cross(cameraOrientation, cameraRight));
-    cameraOrientation =
-        glm::rotate(cameraOrientation, glm::radians(yOffSet),
-                    glm::normalize(glm::cross(cameraOrientation, _cameraUp)));
-    cameraOrientation =
-        glm::rotate(cameraOrientation, glm::radians(xOffSet), _cameraUp);
-    std::cout << _rotationByY << '\n';
 
+    glm::vec3 newCameraOrientation;
+    newCameraOrientation.x =
+        std::cos(glm::radians(_yaw)) * std::cos(glm::radians(_pitch));
+    newCameraOrientation.y = std::sin(glm::radians(_pitch));
+    newCameraOrientation.z =
+        std::sin(glm::radians(_yaw)) * std::cos(glm::radians(_pitch));
+    _cameraOrientation = newCameraOrientation;
   } else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) ==
              GLFW_RELEASE) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
