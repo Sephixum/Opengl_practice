@@ -2,8 +2,8 @@
 
 #include "ShaderClass.hpp"
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <glm/fwd.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -31,15 +31,16 @@ private:
   glm::vec3 _cameraUp;
   glm::vec3 _cameraPosition;
   glm::vec3 _cameraOrientation;
+  glm::mat4 _cameraMatrix;
 
 public:
   explicit Camera(int width, int height, glm::vec3 position,
                   GLFWwindow *window) noexcept;
 
-  auto setMatrixToShader(float FOV, float nearPlane, float farPlane,
-                         Shader &shaderProgram, const char *uniform) noexcept
+  auto updateCameraMatrix(float FOV, float nearPlane, float farPlane) noexcept
       -> void;
+
+  auto setCameraMatrixToShader(Shader &shader,
+                               const char *uniform) const noexcept -> void;
   auto processInput(GLFWwindow *) noexcept -> void;
-
-
 };

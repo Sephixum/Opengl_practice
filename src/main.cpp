@@ -16,7 +16,7 @@
 #include <vector>
 
 // Vertices coordinations
-GLfloat vertices[]{
+GLfloat cubeVertices[]{
     //  COORDINATES    /      COLORS     /  TEXCOORDS  //  EXPLANATION
     +0.5f, +0.5f, +0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // ...........
     +0.5f, +0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // ...........
@@ -29,7 +29,29 @@ GLfloat vertices[]{
 };
 
 // Indices for vertices order
-GLuint indices[]{
+GLuint cubeIndices[]{
+    0, 3, 2, 2, 1, 0, //// front square
+    0, 1, 6, 0, 7, 6, //// right square
+    6, 5, 4, 4, 6, 7, //// back square
+    5, 2, 3, 3, 4, 5, //// left square
+    3, 4, 7, 7, 0, 3, //// down square
+    2, 5, 6, 6, 1, 2, //// up square
+};
+
+GLfloat lightVertices[]{
+    //  COORDINATES    /      COLORS     /  TEXCOORDS  //  EXPLANATION
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // ...........
+    +0.5f, +0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // ...........
+    +0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // ...........
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // ...........
+    -0.5f, -0.5f, +0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // ...........
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // ...........
+    -0.5f, +0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // ...........
+    -0.5f, +0.5f, +0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // ...........
+};
+
+// Indices for vertices order
+GLuint lightIndices[]{
     0, 3, 2, 2, 1, 0, //// front square
     0, 1, 6, 0, 7, 6, //// right square
     6, 5, 4, 4, 6, 7, //// back square
@@ -71,25 +93,24 @@ auto main() -> int {
 
   glEnable(GL_DEPTH_TEST);
 
-  Shader shaderProgram("resources/shaders/vert.glsl",
-                       "resources/shaders/frag.glsl");
+  Shader cubeShader("resources/shaders/cube.vs", "resources/shaders/cube.fs");
+  Shader lightShader("resources/shaders/cube.vs", "resources/shaders/cube.fs");
 
-  VAO vertexAttributes;
-  vertexAttributes.bind();
+  VAO cubeVAO;
+  cubeVAO.bind();
 
-  VBO vertexBuffer(vertices, sizeof(vertices));
+  VBO cubeVBO(cubeVertices, sizeof(cubeVertices));
 
-  vertexAttributes.linkVBO(vertexBuffer, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat),
-                           0);
-  vertexAttributes.linkVBO(vertexBuffer, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat),
-                           (void *)(3 * sizeof(GLfloat)));
-  vertexAttributes.linkVBO(vertexBuffer, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat),
-                           (void *)(6 * sizeof(GLfloat)));
+  cubeVAO.linkVBO(cubeVBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), 0);
+  cubeVAO.linkVBO(cubeVBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat),
+                  (void *)(3 * sizeof(GLfloat)));
+  cubeVAO.linkVBO(cubeVBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat),
+                  (void *)(6 * sizeof(GLfloat)));
 
-  EBO indicesBuffer(indices, sizeof(indices));
-  indicesBuffer.bind();
+  EBO cubeEBO(cubeIndices, sizeof(cubeIndices));
+  cubeEBO.bind();
 
-  vertexAttributes.unBind();
+  cubeVAO.unBind();
 
   Texture pop_catTexture;
   Texture smilingEmoji;
@@ -105,10 +126,8 @@ auto main() -> int {
     std::exit(1);
   }
 
-  pop_catTexture.setTextureUnit(shaderProgram, "tex0", 0);
-  smilingEmoji.setTextureUnit(shaderProgram, "tex1", 1);
-
-  Camera camera(WIN_WIDTH, WIN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f), window);
+  pop_catTexture.setTextureUnit(cubeShader, "tex0", 0);
+  smilingEmoji.setTextureUnit(cubeShader, "tex1", 1);
 
   std::vector<glm::vec3> cubePositions{
       glm::vec3(2.0f, 2.0f, 2.0f),   glm::vec3(-2.0f, -2.0f, -2.0f),
@@ -117,7 +136,19 @@ auto main() -> int {
       glm::vec3(4.0f, -3.0f, 4.0f),
   };
 
+  cubeShader.activate();
+
   auto model = glm::mat4(1.0f);
+  model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+  glUniformMatrix4fv(glGetUniformLocation(cubeShader.getID(), "model"), 1,
+                     GL_FALSE, glm::value_ptr(model));
+
+  pop_catTexture.activate();
+  pop_catTexture.bind();
+  smilingEmoji.activate();
+  smilingEmoji.bind();
+
+  Camera camera(WIN_WIDTH, WIN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f), window);
 
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
@@ -125,40 +156,36 @@ auto main() -> int {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shaderProgram.activate();
-    pop_catTexture.activate();
-    pop_catTexture.bind();
-    smilingEmoji.activate();
-    smilingEmoji.bind();
-    camera.setMatrixToShader(66.0f, 0.1f, 100.0f, shaderProgram,
-                             "cameraMatrix");
+     /* camera position is only changed via W A S D
+      * how ever camera orientation is a vector showing
+      * where we are looking at
+      */
+
     camera.processInput(window);
 
+    /*
+     * small explanations for less confusion
+     * camera has to be updated based on an FOV and etc
+     * and after all we set it to shader
+     */
+
+    camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
+    camera.setCameraMatrixToShader(cubeShader, "cameraMatrix");
+
     // render stuff
-    vertexAttributes.bind();
-    for (int i = 0; i < cubePositions.size(); i++) {
-      model = glm::mat4(1.0f);
-      float angle = 20 * i;
-      model =
-          glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 1.0f, 1.0f));
-      model = glm::translate(model, cubePositions[i]);
-
-      glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"),
-                         1, GL_FALSE, glm::value_ptr(model));
-
-      glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-    }
-    vertexAttributes.unBind();
+    cubeVAO.bind();
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    cubeVAO.unBind();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
   pop_catTexture.deleteTexture();
   smilingEmoji.deleteTexture();
-  vertexAttributes.deleteAttr();
-  vertexBuffer.deleteBuffer();
-  indicesBuffer.deleteBuffer();
-  shaderProgram.deleteProgram();
+  cubeVAO.deleteAttr();
+  cubeVBO.deleteBuffer();
+  cubeEBO.deleteBuffer();
+  cubeShader.deleteProgram();
 
   glfwTerminate();
   return 0;

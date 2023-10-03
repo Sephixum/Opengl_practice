@@ -20,11 +20,12 @@ Camera::Camera(int width, int height, glm::vec3 position,
 
   _cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
   _cameraOrientation = glm::vec3(0.0f, 0.0f, -1.0f);
+
+  _cameraMatrix = glm::mat4(1.0f);
 }
 
-auto Camera::setMatrixToShader(float FOV, float nearPlane, float farPlane,
-                               Shader &shaderProgram,
-                               const char *uniform) noexcept -> void {
+auto Camera::updateCameraMatrix(float FOV, float nearPlane,
+                                float farPlane) noexcept -> void {
 
   auto projection =
       glm::perspective(glm::radians(FOV),
@@ -33,8 +34,15 @@ auto Camera::setMatrixToShader(float FOV, float nearPlane, float farPlane,
   auto view = glm::lookAt(_cameraPosition, _cameraPosition + _cameraOrientation,
                           _cameraUp);
 
-  glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), uniform), 1,
-                     GL_FALSE, glm::value_ptr(projection * view));
+  _cameraMatrix = projection * view;
+}
+
+auto Camera::setCameraMatrixToShader(Shader &shader,
+                                     const char *uniform) const noexcept
+    -> void {
+
+  glUniformMatrix4fv(glGetUniformLocation(shader.getID(), uniform), 1, GL_FALSE,
+                     glm::value_ptr(_cameraMatrix));
 }
 
 auto Camera::processInput(GLFWwindow *window) noexcept -> void {
