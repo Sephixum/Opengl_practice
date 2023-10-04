@@ -265,15 +265,15 @@ auto main() -> int {
      * just to make it more editable we pass them each
      * loop.
      */
-    phase = abs(std::sin(float(glfwGetTime())));
-    lightColor.x = phase;
-    lightColor.y = phase;
-    lightColor.z = phase;
+    // float phase{abs(std::sin(float(glfwGetTime())))};
+    // lightColor.x = phase;
+    // lightColor.y = phase;
+    // lightColor.z = phase;
 
     camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
 
     pyramidShader.activate();
-    pyramidShader.setVec3("lightColor", lightColor);
+    // pyramidShader.setVec3("lightColor", lightColor);
     pyramidShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     pyramidVAO.bind();
     pyramidEBO.bind();
@@ -283,7 +283,7 @@ auto main() -> int {
     pyramidShader.deActivate();
 
     lightShader.activate();
-    lightShader.setVec3("lightColor", lightColor);
+    // lightShader.setVec3("lightColor", lightColor);
     lightShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     lightVAO.bind();
     lightEBO.bind();

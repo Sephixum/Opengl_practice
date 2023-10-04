@@ -5,11 +5,14 @@ in vec3 color;
 in vec2 texCoord;
 
 uniform sampler2D tex0;
-// uniform sampler2D tex1;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 
 void main() {
+  float ambientStrength = 0.1f;
+  vec3 ambient = ambientStrength * lightColor;
+
+  vec3 result = ambient * objectColor;
   FragColor =  texture(tex0, texCoord) *
-               vec4(lightColor * objectColor, 1.0f);
+               vec4(result, 1.0f);
 }
