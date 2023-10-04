@@ -120,3 +120,7 @@ auto Camera::processInput(GLFWwindow *window) noexcept -> void {
     _firstMove = true;
   }
 }
+
+auto Camera::getCameraMatrix() const noexcept -> glm::mat4 {
+  return _cameraMatrix;
+}

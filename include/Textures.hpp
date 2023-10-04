@@ -13,7 +13,6 @@ public:
   explicit Texture() = default;
   explicit Texture(const char *, GLenum, GLenum, GLenum);
 
-  auto setTextureUnit(Shader &, const char *, GLint) const noexcept -> void;
   auto bind() const noexcept -> void;
   auto activate() const noexcept -> void;
   auto unBind() const noexcept -> void;

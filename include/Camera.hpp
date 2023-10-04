@@ -43,4 +43,6 @@ public:
   auto setCameraMatrixToShader(Shader &shader,
                                const char *uniform) const noexcept -> void;
   auto processInput(GLFWwindow *) noexcept -> void;
+
+  auto getCameraMatrix() const noexcept -> glm::mat4;
 };

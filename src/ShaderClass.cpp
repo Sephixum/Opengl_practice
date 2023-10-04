@@ -135,3 +135,8 @@ auto Shader::setMat4(const std::string &name,
   glUniformMatrix4fv(glGetUniformLocation(_ID, name.c_str()), 1, GL_FALSE,
                      glm::value_ptr(matrix));
 }
+
+auto Shader::setTextureUnit(const std::string &name, GLint unit) const noexcept
+    -> void {
+  glUniform1i(glGetUniformLocation(_ID, name.c_str()), unit);
+}

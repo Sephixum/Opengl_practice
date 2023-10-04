@@ -7,7 +7,7 @@ private:
   GLuint _ID;
 
 public:
-  explicit EBO(GLuint *, GLsizeiptr) noexcept;
+  explicit EBO(GLuint *indices, GLsizeiptr size) noexcept;
 
   auto bind() const noexcept -> void;
   auto unBind() const noexcept -> void;

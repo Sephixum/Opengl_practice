@@ -2,12 +2,13 @@
 
 VAO::VAO() noexcept { glGenVertexArrays(1, &_ID); }
 
-void VAO::linkVBO(VBO &vbo, GLuint layout, GLuint numOfComponents, GLenum type,
-                  GLsizeiptr stride, void *offSet) const noexcept {
+void VAO::linkVBO(VBO &vbo, GLuint layout, GLuint numOfComponents,
+                  GLenum typeOfComponents, GLsizeiptr stride,
+                  void *offSet) const noexcept {
 
   vbo.bind();
-  glVertexAttribPointer(layout, numOfComponents, type, GL_FALSE, stride,
-                        offSet);
+  glVertexAttribPointer(layout, numOfComponents, typeOfComponents, GL_FALSE,
+                        stride, offSet);
   glEnableVertexAttribArray(layout);
   vbo.unBind();
 }

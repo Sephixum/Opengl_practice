@@ -44,4 +44,6 @@ public:
       -> void;
   auto setMat4(const std::string &name, const glm::mat4 &matrix) const noexcept
       -> void;
+  auto setTextureUnit(const std::string &name, GLint unit) const noexcept
+      -> void;
 };

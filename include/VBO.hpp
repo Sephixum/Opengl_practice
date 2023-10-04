@@ -7,7 +7,7 @@ private:
   GLuint _ID;
 
 public:
-  explicit VBO(GLfloat *, GLsizeiptr);
+  explicit VBO(GLfloat *vertices, GLsizeiptr size);
 
   auto bind() const noexcept -> void;
   auto unBind() const noexcept -> void;
