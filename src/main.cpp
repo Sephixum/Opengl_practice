@@ -171,7 +171,7 @@ auto main() -> int {
   glEnable(GL_DEPTH_TEST);
 
   Shader pyramidShader("resources/shaders/pyramidVertex.glsl",
-                    "resources/shaders/pyramidFragment.glsl");
+                       "resources/shaders/pyramidFragment.glsl");
   Shader lightShader("resources/shaders/lightVertex.glsl",
                      "resources/shaders/lightFragment.glsl");
 
@@ -213,10 +213,10 @@ auto main() -> int {
     std::exit(1);
   }
 
-  auto lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+  glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
   pyramidShader.activate();
-  pyramidShader.setTextureUnit("tex1", 1);
+  pyramidShader.setTextureUnit("tex0", 1);
 
   auto pyramidModel = glm::mat4(1.0f);
   pyramidModel = glm::translate(pyramidModel, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -240,6 +240,7 @@ auto main() -> int {
 
   Camera camera(WIN_WIDTH, WIN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f), window);
 
+  float phase{};
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
@@ -264,10 +265,15 @@ auto main() -> int {
      * just to make it more editable we pass them each
      * loop.
      */
+    phase = abs(std::sin(float(glfwGetTime())));
+    lightColor.x = phase;
+    lightColor.y = phase;
+    lightColor.z = phase;
 
     camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
 
     pyramidShader.activate();
+    pyramidShader.setVec3("lightColor", lightColor);
     pyramidShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     pyramidVAO.bind();
     pyramidEBO.bind();
@@ -277,6 +283,7 @@ auto main() -> int {
     pyramidShader.deActivate();
 
     lightShader.activate();
+    lightShader.setVec3("lightColor", lightColor);
     lightShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     lightVAO.bind();
     lightEBO.bind();
