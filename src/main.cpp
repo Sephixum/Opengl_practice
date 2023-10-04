@@ -52,12 +52,12 @@ GLfloat lightVertices[]{
 
 // Indices for vertices order
 GLuint lightIndices[]{
-    0, 3, 2, 2, 1, 0, //// front square
-    0, 1, 6, 0, 7, 6, //// right square
-    6, 5, 4, 4, 6, 7, //// back square
-    5, 2, 3, 3, 4, 5, //// left square
-    3, 4, 7, 7, 0, 3, //// down square
-    2, 5, 6, 6, 1, 2, //// up square
+    0, 3, 2, 2, 1, 0, // front square
+    0, 1, 6, 0, 7, 6, // right square
+    6, 5, 4, 4, 6, 7, // back square
+    5, 2, 3, 3, 4, 5, // left square
+    3, 4, 7, 7, 0, 3, // down square
+    2, 5, 6, 6, 1, 2, // up square
 };
 
 auto processInput(GLFWwindow *window) -> void {

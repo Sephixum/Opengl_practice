@@ -11,13 +11,13 @@ auto get_file_contents(const char *fileName) -> std::string {
       std::format("There is no file with path \"{}\".\n", fileName));
 }
 
-Shader::Shader(const char *vertexFile, const char *fragmentFile) {
+Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
 
   std::string vertexCode;
   std::string fragmentCode;
   try {
-    vertexCode = get_file_contents(vertexFile);
-    fragmentCode = get_file_contents(fragmentFile);
+    vertexCode = get_file_contents(vertexShaderFile);
+    fragmentCode = get_file_contents(fragmentShaderFile);
   } catch (std::runtime_error &e) {
     std::cerr << "Caught an exception: " << e.what();
     std::exit(1);
@@ -69,9 +69,69 @@ auto Shader::deActivate() const noexcept -> void { glUseProgram(0); }
 
 auto Shader::deleteProgram() const noexcept -> void { glDeleteProgram(_ID); }
 
-auto Shader::setUniformValue(const char *uniformName,
-                             float value) const noexcept -> void {
-  glUniform1f(glGetUniformLocation(_ID, uniformName), value);
+auto Shader::getID() const noexcept -> GLuint { return _ID; }
+
+auto Shader::setBool(const std::string &name, bool value) const noexcept
+    -> void {
+  glUniform1i(glGetUniformLocation(_ID, name.c_str()), static_cast<int>(value));
 }
 
-auto Shader::getID() const noexcept -> GLuint { return _ID; }
+auto Shader::setInt(const std::string &name, int value) const noexcept -> void {
+  glUniform1i(glGetUniformLocation(_ID, name.c_str()), value);
+}
+
+auto Shader::setFloat(const std::string &name, float value) const noexcept
+    -> void {
+  glUniform1f(glGetUniformLocation(_ID, name.c_str()), value);
+}
+
+auto Shader::setVec2(const std::string &name,
+                     const glm::vec2 &value) const noexcept -> void {
+  glUniform2fv(glGetUniformLocation(_ID, name.c_str()), 1,
+               glm::value_ptr(value));
+}
+
+auto Shader::setVec2(const std::string &name, float x, float y) const noexcept
+    -> void {
+  glUniform2f(glGetUniformLocation(_ID, name.c_str()), x, y);
+}
+
+auto Shader::setVec3(const std::string &name,
+                     const glm::vec3 &value) const noexcept -> void {
+  glUniform3fv(glGetUniformLocation(_ID, name.c_str()), 1,
+               glm::value_ptr(value));
+}
+
+auto Shader::setVec3(const std::string &name, float x, float y,
+                     float z) const noexcept -> void {
+  glUniform3f(glGetUniformLocation(_ID, name.c_str()), x, y, z);
+}
+
+auto Shader::setVec4(const std::string &name,
+                     const glm::vec4 &value) const noexcept -> void {
+  glUniform4fv(glGetUniformLocation(_ID, name.c_str()), 1,
+               glm::value_ptr(value));
+}
+
+auto Shader::setVec4(const std::string &name, float x, float y, float z,
+                     float w) const noexcept -> void {
+  glUniform4f(glGetUniformLocation(_ID, name.c_str()), x, y, z, w);
+}
+
+auto Shader::setMat2(const std::string &name,
+                     const glm::mat2 &matrix) const noexcept -> void {
+  glUniformMatrix2fv(glGetUniformLocation(_ID, name.c_str()), 1, GL_FALSE,
+                     glm::value_ptr(matrix));
+}
+
+auto Shader::setMat3(const std::string &name,
+                     const glm::mat3 &matrix) const noexcept -> void {
+  glUniformMatrix3fv(glGetUniformLocation(_ID, name.c_str()), 1, GL_FALSE,
+                     glm::value_ptr(matrix));
+}
+
+auto Shader::setMat4(const std::string &name,
+                     const glm::mat4 &matrix) const noexcept -> void {
+  glUniformMatrix4fv(glGetUniformLocation(_ID, name.c_str()), 1, GL_FALSE,
+                     glm::value_ptr(matrix));
+}
