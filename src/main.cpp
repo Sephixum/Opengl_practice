@@ -17,7 +17,7 @@
 #include <vector>
 
 // Vertices coordinates
-static GLfloat pyramidVertices[]{
+static std::vector<GLfloat> pyramidVertices{
     -0.5f, 0.0f, 0.5f, // COORDS
     0.0f, 0.0f,        // TEXCOORDS
     0.0f, -1.0f, 0.0f, // NORMALS
@@ -90,7 +90,7 @@ static GLfloat pyramidVertices[]{
 };
 
 // Indices for vertices order
-static GLuint pyramidIndices[]{
+static std::vector<GLuint> pyramidIndices{
     0,  1,  2,  // Bottom side
     0,  2,  3,  // Bottom side
     4,  6,  5,  // Left side
@@ -99,7 +99,7 @@ static GLuint pyramidIndices[]{
     13, 15, 14  // Facing side
 };
 
-static GLfloat lightVertices[]{
+static std::vector<GLfloat> lightVertices{
     //  COORDINATES      //  EXPLANATION
     +0.1f, +0.1f, +0.1f, // ...........
     +0.1f, +0.1f, -0.1f, // ...........
@@ -112,7 +112,7 @@ static GLfloat lightVertices[]{
 };
 
 // Indices for vertices order
-static GLuint lightIndices[]{
+static std::vector<GLuint> lightIndices{
     0, 3, 2, 2, 1, 0, // front square
     0, 1, 6, 0, 7, 6, // right square
     6, 5, 4, 4, 6, 7, // back square
@@ -162,7 +162,8 @@ auto main() -> int {
   VAO pyramidVAO;
   pyramidVAO.bind();
 
-  VBO pyramidVBO(pyramidVertices, sizeof(pyramidVertices));
+  VBO pyramidVBO(pyramidVertices.data(),
+                 pyramidVertices.size() * sizeof(GLfloat));
 
   pyramidVAO.linkVBO(pyramidVBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)0);
@@ -171,17 +172,17 @@ auto main() -> int {
   pyramidVAO.linkVBO(pyramidVBO, 2, 3, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)(5 * sizeof(GLfloat)));
 
-  EBO pyramidEBO(pyramidIndices, sizeof(pyramidIndices));
+  EBO pyramidEBO(pyramidIndices.data(), pyramidIndices.size() * sizeof(GLuint));
   pyramidVAO.unBind();
 
   VAO lightVAO;
   lightVAO.bind();
 
-  VBO lightVBO(lightVertices, sizeof(lightVertices));
+  VBO lightVBO(lightVertices.data(), lightVertices.size() * sizeof(GLfloat));
 
   lightVAO.linkVBO(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void *)0);
 
-  EBO lightEBO(lightIndices, sizeof(lightIndices));
+  EBO lightEBO(lightIndices.data(), lightIndices.size() * sizeof(GLfloat));
   lightVAO.unBind();
 
   Texture redBrickTexture;
@@ -192,6 +193,7 @@ auto main() -> int {
   } catch (std::runtime_error &e) {
     std::cerr << std::format("Caught and exception : {}", e.what())
               << std::endl;
+    stbi_set_flip_vertically_on_load(true);
     std::exit(1);
   }
 
@@ -211,7 +213,7 @@ auto main() -> int {
 
   lightShader.activate();
 
-  auto lightModel = glm::mat4(1.0f);
+  glm::mat4 lightModel(1.0f);
   lightModel = glm::translate(lightModel, lightPosition);
   lightShader.setMat4("model", lightModel);
   lightShader.setVec3("lightColor", lightColor);
@@ -222,7 +224,6 @@ auto main() -> int {
 
   Camera camera(WIN_WIDTH, WIN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f), window);
 
-  int kir(2);
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
@@ -248,10 +249,10 @@ auto main() -> int {
      * loop.
      */
 
-    float radius = 1.0f;
-    float x = radius * std::cos((glfwGetTime()));
-    float y = radius * std::cos((glfwGetTime()));
-    float z = radius * std::sin((glfwGetTime()));
+    auto radius = 1.0f;
+    auto x = radius * std::cos((glfwGetTime()));
+    auto y = radius * std::cos((glfwGetTime()));
+    auto z = radius * std::sin((glfwGetTime()));
     lightPosition = glm::vec3(x, 1.0f, z);
 
     camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
