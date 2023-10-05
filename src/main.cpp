@@ -18,89 +18,73 @@
 
 // Vertices coordinates
 static GLfloat pyramidVertices[]{
-    -0.5f, 0.0f, 0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 0.0f,          // TEXCOORDS
-    0.0f, -1.0f, 0.0f,   // NORMALS
+    -0.5f, 0.0f, 0.5f, // COORDS
+    0.0f, 0.0f,        // TEXCOORDS
+    0.0f, -1.0f, 0.0f, // NORMALS
 
-    -0.5f, 0.0f, -0.5f,  // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 5.0f,          // TEXCOORDS
-    0.0f, -1.0f, 0.0f,   // NORMALS
+    -0.5f, 0.0f, -0.5f, // COORDS
+    0.0f, 5.0f,         // TEXCOORDS
+    0.0f, -1.0f, 0.0f,  // NORMALS
 
-    0.5f, 0.0f, -0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 5.0f,          // TEXCOORDS
-    0.0f, -1.0f, 0.0f,   // NORMALS
+    0.5f, 0.0f, -0.5f, // COORDS
+    5.0f, 5.0f,        // TEXCOORDS
+    0.0f, -1.0f, 0.0f, // NORMALS
 
-    0.5f, 0.0f, 0.5f,    // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 0.0f,          // TEXCOORDS
-    0.0f, -1.0f, 0.0f,   // NORMALS
+    0.5f, 0.0f, 0.5f,  // COORDS
+    5.0f, 0.0f,        // TEXCOORDS
+    0.0f, -1.0f, 0.0f, // NORMALS
     //---------Bottom side---------
 
-    -0.5f, 0.0f, 0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 0.0f,          // TEXCOORDS
-    -0.8f, 0.5f, 0.0f,   // NORMALS
+    -0.5f, 0.0f, 0.5f, // COORDS
+    0.0f, 0.0f,        // TEXCOORDS
+    -0.8f, 0.5f, 0.0f, // NORMALS
 
-    -0.5f, 0.0f, -0.5f,  // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 0.0f,          // TEXCOORDS
-    -0.8f, 0.5f, 0.0f,   // NORMALS
+    -0.5f, 0.0f, -0.5f, // COORDS
+    5.0f, 0.0f,         // TEXCOORDS
+    -0.8f, 0.5f, 0.0f,  // NORMALS
 
-    0.0f, 0.8f, 0.0f,    // COORDS
-    0.92f, 0.86f, 0.76f, // COLORS
-    2.5f, 5.0f,          // TEXCOORDS
-    -0.8f, 0.5f, 0.0f,   // NORMALS
+    0.0f, 0.8f, 0.0f,  // COORDS
+    2.5f, 5.0f,        // TEXCOORDS
+    -0.8f, 0.5f, 0.0f, // NORMALS
     //---------Left Side----------
 
-    -0.5f, 0.0f, -0.5f,  // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 0.0f,          // TEXCOORDS
-    0.0f, 0.5f, -0.8f,   // NORMALS
+    -0.5f, 0.0f, -0.5f, // COORDS
+    5.0f, 0.0f,         // TEXCOORDS
+    0.0f, 0.5f, -0.8f,  // NORMALS
 
-    0.5f, 0.0f, -0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 0.0f,          // TEXCOORDS
-    0.0f, 0.5f, -0.8f,   // NORMALS
+    0.5f, 0.0f, -0.5f, // COORDS
+    0.0f, 0.0f,        // TEXCOORDS
+    0.0f, 0.5f, -0.8f, // NORMALS
 
-    0.0f, 0.8f, 0.0f,    // COORDS
-    0.92f, 0.86f, 0.76f, // COLORS
-    2.5f, 5.0f,          // TEXCOORDS
-    0.0f, 0.5f, -0.8f,   // NORMALS
+    0.0f, 0.8f, 0.0f,  // COORDS
+    2.5f, 5.0f,        // TEXCOORDS
+    0.0f, 0.5f, -0.8f, // NORMALS
     //--------Non-facing side------
 
-    0.5f, 0.0f, -0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 0.0f,          // TEXCOORDS
-    0.8f, 0.5f, 0.0f,    // NORMALS
+    0.5f, 0.0f, -0.5f, // COORDS
+    0.0f, 0.0f,        // TEXCOORDS
+    0.8f, 0.5f, 0.0f,  // NORMALS
 
-    0.5f, 0.0f, 0.5f,    // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 0.0f,          // TEXCOORDS
-    0.8f, 0.5f, 0.0f,    // NORMALS
+    0.5f, 0.0f, 0.5f, // COORDS
+    5.0f, 0.0f,       // TEXCOORDS
+    0.8f, 0.5f, 0.0f, // NORMALS
 
-    0.0f, 0.8f, 0.0f,    // COORDS
-    0.92f, 0.86f, 0.76f, // COLORS
-    2.5f, 5.0f,          // TEXCOORDS
-    0.8f, 0.5f, 0.0f,    // NORMALS
+    0.0f, 0.8f, 0.0f, // COORDS
+    2.5f, 5.0f,       // TEXCOORDS
+    0.8f, 0.5f, 0.0f, // NORMALS
     //--------Right side----------
 
-    0.5f, 0.0f, 0.5f,    // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    5.0f, 0.0f,          // TEXCOORDS
-    0.0f, 0.5f, 0.8f,    // NORMALS
+    0.5f, 0.0f, 0.5f, // COORDS
+    5.0f, 0.0f,       // TEXCOORDS
+    0.0f, 0.5f, 0.8f, // NORMALS
 
-    -0.5f, 0.0f, 0.5f,   // COORDS
-    0.83f, 0.70f, 0.44f, // COLORS
-    0.0f, 0.0f,          // TEXCOORDS
-    0.0f, 0.5f, 0.8f,    // NORMALS
+    -0.5f, 0.0f, 0.5f, // COORDS
+    0.0f, 0.0f,        // TEXCOORDS
+    0.0f, 0.5f, 0.8f,  // NORMALS
 
-    0.0f, 0.8f, 0.0f,    // COORDS
-    0.92f, 0.86f, 0.76f, // COLORS
-    2.5f, 5.0f,          // TEXCOORDS
-    0.0f, 0.5f, 0.8f     // NORMALS
+    0.0f, 0.8f, 0.0f, // COORDS
+    2.5f, 5.0f,       // TEXCOORDS
+    0.0f, 0.5f, 0.8f  // NORMALS
 
     //-------Facing side----------
 };
@@ -116,15 +100,15 @@ static GLuint pyramidIndices[]{
 };
 
 static GLfloat lightVertices[]{
-    //  COORDINATES    /      COLORS       //  EXPLANATION
-    +0.1f, +0.1f, +0.1f, 1.0f, 0.0f, 0.0f, // ...........
-    +0.1f, +0.1f, -0.1f, 0.0f, 1.0f, 0.0f, // ...........
-    +0.1f, -0.1f, -0.1f, 0.0f, 0.0f, 1.0f, // ...........
-    +0.1f, -0.1f, +0.1f, 1.0f, 1.0f, 1.0f, // ...........
-    -0.1f, -0.1f, +0.1f, 1.0f, 1.0f, 1.0f, // ...........
-    -0.1f, -0.1f, -0.1f, 1.0f, 1.0f, 1.0f, // ...........
-    -0.1f, +0.1f, -0.1f, 1.0f, 1.0f, 1.0f, // ...........
-    -0.1f, +0.1f, +0.1f, 1.0f, 1.0f, 1.0f, // ...........
+    //  COORDINATES      //  EXPLANATION
+    +0.1f, +0.1f, +0.1f, // ...........
+    +0.1f, +0.1f, -0.1f, // ...........
+    +0.1f, -0.1f, -0.1f, // ...........
+    +0.1f, -0.1f, +0.1f, // ...........
+    -0.1f, -0.1f, +0.1f, // ...........
+    -0.1f, -0.1f, -0.1f, // ...........
+    -0.1f, +0.1f, -0.1f, // ...........
+    -0.1f, +0.1f, +0.1f, // ...........
 };
 
 // Indices for vertices order
@@ -180,12 +164,12 @@ auto main() -> int {
 
   VBO pyramidVBO(pyramidVertices, sizeof(pyramidVertices));
 
-  pyramidVAO.linkVBO(pyramidVBO, 0, 3, GL_FLOAT, 11 * sizeof(GLfloat),
+  pyramidVAO.linkVBO(pyramidVBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)0);
-  pyramidVAO.linkVBO(pyramidVBO, 1, 3, GL_FLOAT, 11 * sizeof(GLfloat),
+  pyramidVAO.linkVBO(pyramidVBO, 1, 2, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)(3 * sizeof(GLfloat)));
-  pyramidVAO.linkVBO(pyramidVBO, 2, 2, GL_FLOAT, 11 * sizeof(GLfloat),
-                     (void *)(6 * sizeof(GLfloat)));
+  pyramidVAO.linkVBO(pyramidVBO, 2, 3, GL_FLOAT, 8 * sizeof(GLfloat),
+                     (void *)(5 * sizeof(GLfloat)));
 
   EBO pyramidEBO(pyramidIndices, sizeof(pyramidIndices));
   pyramidVAO.unBind();
@@ -195,9 +179,7 @@ auto main() -> int {
 
   VBO lightVBO(lightVertices, sizeof(lightVertices));
 
-  lightVAO.linkVBO(lightVBO, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void *)0);
-  lightVAO.linkVBO(lightVBO, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat),
-                   (void *)(3 * sizeof(GLfloat)));
+  lightVAO.linkVBO(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void *)0);
 
   EBO lightEBO(lightIndices, sizeof(lightIndices));
   lightVAO.unBind();
@@ -214,6 +196,7 @@ auto main() -> int {
   }
 
   glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+  glm::vec3 lightPosition(0.5f, 0.5f, 0.5f);
 
   pyramidShader.activate();
   pyramidShader.setTextureUnit("tex0", 1);
@@ -222,17 +205,16 @@ auto main() -> int {
   pyramidModel = glm::translate(pyramidModel, glm::vec3(0.0f, 0.0f, 0.0f));
 
   pyramidShader.setMat4("model", pyramidModel);
-  pyramidShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
   pyramidShader.setVec3("lightColor", lightColor);
+  pyramidShader.setVec3("lightPos", lightPosition);
   pyramidShader.deActivate();
 
   lightShader.activate();
 
   auto lightModel = glm::mat4(1.0f);
-  lightModel = glm::translate(lightModel, glm::vec3(1.0f, 1.0f, 1.2f));
+  lightModel = glm::translate(lightModel, lightPosition);
   lightShader.setMat4("model", lightModel);
   lightShader.setVec3("lightColor", lightColor);
-
   lightShader.deActivate();
 
   redBrickTexture.activate();
@@ -240,7 +222,7 @@ auto main() -> int {
 
   Camera camera(WIN_WIDTH, WIN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f), window);
 
-  float phase{};
+  int kir(2);
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
@@ -265,16 +247,18 @@ auto main() -> int {
      * just to make it more editable we pass them each
      * loop.
      */
-    // float phase{abs(std::sin(float(glfwGetTime())))};
-    // lightColor.x = phase;
-    // lightColor.y = phase;
-    // lightColor.z = phase;
+
+    float radius = 1.0f;
+    float x = radius * std::cos((glfwGetTime()));
+    float y = radius * std::cos((glfwGetTime()));
+    float z = radius * std::sin((glfwGetTime()));
+    lightPosition = glm::vec3(x, 1.0f, z);
 
     camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
 
     pyramidShader.activate();
-    // pyramidShader.setVec3("lightColor", lightColor);
     pyramidShader.setMat4("cameraMatrix", camera.getCameraMatrix());
+    pyramidShader.setVec3("lightPos", lightPosition);
     pyramidVAO.bind();
     pyramidEBO.bind();
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
@@ -283,8 +267,10 @@ auto main() -> int {
     pyramidShader.deActivate();
 
     lightShader.activate();
-    // lightShader.setVec3("lightColor", lightColor);
     lightShader.setMat4("cameraMatrix", camera.getCameraMatrix());
+    lightModel = glm::mat4(1.0f);
+    lightModel = glm::translate(lightModel, lightPosition);
+    lightShader.setMat4("model", lightModel);
     lightVAO.bind();
     lightEBO.bind();
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
