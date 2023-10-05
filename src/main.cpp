@@ -249,17 +249,18 @@ auto main() -> int {
      * loop.
      */
 
-    auto radius = 1.0f;
+    auto radius = 3.0f;
     auto x = radius * std::cos((glfwGetTime()));
     auto y = radius * std::cos((glfwGetTime()));
     auto z = radius * std::sin((glfwGetTime()));
-    lightPosition = glm::vec3(x, 1.0f, z);
+    lightPosition = glm::vec3(x, 2.0f, z);
 
     camera.updateCameraMatrix(90.0f, 0.1f, 100.0f);
 
     pyramidShader.activate();
     pyramidShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     pyramidShader.setVec3("lightPos", lightPosition);
+    pyramidShader.setVec3("viewPos", camera.getCameraPosition());
     pyramidVAO.bind();
     pyramidEBO.bind();
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
@@ -270,6 +271,7 @@ auto main() -> int {
     lightShader.activate();
     lightShader.setMat4("cameraMatrix", camera.getCameraMatrix());
     lightModel = glm::mat4(1.0f);
+    lightModel = glm::scale(lightModel, glm::vec3(0.3, 0.3, 0.3));
     lightModel = glm::translate(lightModel, lightPosition);
     lightShader.setMat4("model", lightModel);
     lightVAO.bind();

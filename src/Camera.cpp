@@ -124,3 +124,7 @@ auto Camera::processInput(GLFWwindow *window) noexcept -> void {
 auto Camera::getCameraMatrix() const noexcept -> glm::mat4 {
   return _cameraMatrix;
 }
+
+auto Camera::getCameraPosition() const noexcept -> glm::vec3 {
+  return _cameraPosition;
+}

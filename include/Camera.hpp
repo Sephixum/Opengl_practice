@@ -39,10 +39,9 @@ public:
 
   auto updateCameraMatrix(float FOV, float nearPlane, float farPlane) noexcept
       -> void;
-
   auto setCameraMatrixToShader(Shader &shader,
                                const char *uniform) const noexcept -> void;
   auto processInput(GLFWwindow *) noexcept -> void;
-
   auto getCameraMatrix() const noexcept -> glm::mat4;
+  auto getCameraPosition() const noexcept -> glm::vec3;
 };
