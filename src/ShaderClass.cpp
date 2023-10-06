@@ -11,6 +11,8 @@ auto Shader::storeFileToString(const char *fileName) -> std::string {
       std::format("There is no file with path \"{}\".\n", fileName));
 }
 
+auto Shader::deActivate() noexcept -> void { glUseProgram(0); }
+
 Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
 
   std::string vertexCode;
@@ -30,7 +32,7 @@ Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
   char infoLog[512];
 
   auto vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexSource, NULL);
+  glShaderSource(vertexShader, 1, &vertexSource, nullptr);
   glCompileShader(vertexShader);
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
   if (!success) {
@@ -45,11 +47,11 @@ Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
   }
 
   auto fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+  glShaderSource(fragmentShader, 1, &fragmentSource, nullptr);
   glCompileShader(fragmentShader);
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
   if (!success) {
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
     std::puts(std::format("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
                           "File : {}\n"
                           "Info : {}\n",
@@ -67,7 +69,7 @@ Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
   glLinkProgram(_ID);
   glGetProgramiv(_ID, GL_LINK_STATUS, &success);
   if (!success) {
-    glGetProgramInfoLog(_ID, 512, NULL, infoLog);
+    glGetProgramInfoLog(_ID, 512, nullptr, infoLog);
     std::cout << "ERROR::SHADER:PROGRAM::LINKING_FAILED\n" << std::endl;
   }
 
@@ -77,7 +79,6 @@ Shader::Shader(const char *vertexShaderFile, const char *fragmentShaderFile) {
 
 auto Shader::activate() const noexcept -> void { glUseProgram(_ID); }
 
-auto Shader::deActivate() const noexcept -> void { glUseProgram(0); }
 
 auto Shader::deleteProgram() const noexcept -> void { glDeleteProgram(_ID); }
 

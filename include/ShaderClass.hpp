@@ -12,15 +12,16 @@
 class Shader {
 private:
   GLuint _ID;
-  auto storeFileToString(const char *fileName) -> std::string;
+  static auto storeFileToString(const char *fileName) -> std::string;
 
 public:
   explicit Shader(const char *vertexShaderFile, const char *fragmentShaderFile);
 
+  static auto deActivate() noexcept -> void;
+
   auto activate() const noexcept -> void;
-  auto deActivate() const noexcept -> void;
   auto deleteProgram() const noexcept -> void;
-  auto getID() const noexcept -> GLuint;
+  [[nodiscard]] auto getID() const noexcept -> GLuint;
 
   auto setBool(const char *name, bool value) const noexcept -> void;
   auto setInt(const char *name, int value) const noexcept -> void;

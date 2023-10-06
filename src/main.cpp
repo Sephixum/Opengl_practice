@@ -1,125 +1,20 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
 #include "Camera.hpp"
 #include "EBO.hpp"
 #include "Globals.hpp"
 #include "ShaderClass.hpp"
+#include "Shapes.hpp"
 #include "Textures.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "stb_image.h"
 
-#include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <format>
 #include <glm/ext/matrix_transform.hpp>
-#include <glm/glm.hpp>
 #include <iostream>
-#include <vector>
-
-// Vertices coordinates
-static std::vector<GLfloat> pyramidVertices{
-    -0.5f, 0.0f, 0.5f, // COORDS
-    0.0f, 0.0f,        // TEXCOORDS
-    0.0f, -1.0f, 0.0f, // NORMALS
-
-    -0.5f, 0.0f, -0.5f, // COORDS
-    0.0f, 5.0f,         // TEXCOORDS
-    0.0f, -1.0f, 0.0f,  // NORMALS
-
-    0.5f, 0.0f, -0.5f, // COORDS
-    5.0f, 5.0f,        // TEXCOORDS
-    0.0f, -1.0f, 0.0f, // NORMALS
-
-    0.5f, 0.0f, 0.5f,  // COORDS
-    5.0f, 0.0f,        // TEXCOORDS
-    0.0f, -1.0f, 0.0f, // NORMALS
-    //---------Bottom side---------
-
-    -0.5f, 0.0f, 0.5f, // COORDS
-    0.0f, 0.0f,        // TEXCOORDS
-    -0.8f, 0.5f, 0.0f, // NORMALS
-
-    -0.5f, 0.0f, -0.5f, // COORDS
-    5.0f, 0.0f,         // TEXCOORDS
-    -0.8f, 0.5f, 0.0f,  // NORMALS
-
-    0.0f, 0.8f, 0.0f,  // COORDS
-    2.5f, 5.0f,        // TEXCOORDS
-    -0.8f, 0.5f, 0.0f, // NORMALS
-    //---------Left Side----------
-
-    -0.5f, 0.0f, -0.5f, // COORDS
-    5.0f, 0.0f,         // TEXCOORDS
-    0.0f, 0.5f, -0.8f,  // NORMALS
-
-    0.5f, 0.0f, -0.5f, // COORDS
-    0.0f, 0.0f,        // TEXCOORDS
-    0.0f, 0.5f, -0.8f, // NORMALS
-
-    0.0f, 0.8f, 0.0f,  // COORDS
-    2.5f, 5.0f,        // TEXCOORDS
-    0.0f, 0.5f, -0.8f, // NORMALS
-    //--------Non-facing side------
-
-    0.5f, 0.0f, -0.5f, // COORDS
-    0.0f, 0.0f,        // TEXCOORDS
-    0.8f, 0.5f, 0.0f,  // NORMALS
-
-    0.5f, 0.0f, 0.5f, // COORDS
-    5.0f, 0.0f,       // TEXCOORDS
-    0.8f, 0.5f, 0.0f, // NORMALS
-
-    0.0f, 0.8f, 0.0f, // COORDS
-    2.5f, 5.0f,       // TEXCOORDS
-    0.8f, 0.5f, 0.0f, // NORMALS
-    //--------Right side----------
-
-    0.5f, 0.0f, 0.5f, // COORDS
-    5.0f, 0.0f,       // TEXCOORDS
-    0.0f, 0.5f, 0.8f, // NORMALS
-
-    -0.5f, 0.0f, 0.5f, // COORDS
-    0.0f, 0.0f,        // TEXCOORDS
-    0.0f, 0.5f, 0.8f,  // NORMALS
-
-    0.0f, 0.8f, 0.0f, // COORDS
-    2.5f, 5.0f,       // TEXCOORDS
-    0.0f, 0.5f, 0.8f  // NORMALS
-
-    //-------Facing side----------
-};
-
-// Indices for vertices order
-static std::vector<GLuint> pyramidIndices{
-    0,  1,  2,  // Bottom side
-    0,  2,  3,  // Bottom side
-    4,  6,  5,  // Left side
-    7,  9,  8,  // Non-facing side
-    10, 12, 11, // Right side
-    13, 15, 14  // Facing side
-};
-
-static std::vector<GLfloat> lightVertices{
-    //  COORDINATES      //  EXPLANATION
-    +0.1f, +0.1f, +0.1f, // ...........
-    +0.1f, +0.1f, -0.1f, // ...........
-    +0.1f, -0.1f, -0.1f, // ...........
-    +0.1f, -0.1f, +0.1f, // ...........
-    -0.1f, -0.1f, +0.1f, // ...........
-    -0.1f, -0.1f, -0.1f, // ...........
-    -0.1f, +0.1f, -0.1f, // ...........
-    -0.1f, +0.1f, +0.1f, // ...........
-};
-
-// Indices for vertices order
-static std::vector<GLuint> lightIndices{
-    0, 3, 2, 2, 1, 0, // front square
-    0, 1, 6, 0, 7, 6, // right square
-    6, 5, 4, 4, 6, 7, // back square
-    5, 2, 3, 3, 4, 5, // left square
-    3, 4, 7, 7, 0, 3, // down square
-    2, 5, 6, 6, 1, 2, // up square
-};
 
 auto processInput(GLFWwindow *window) -> void {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -134,8 +29,8 @@ auto main() -> int {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   auto window =
-      glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "Test window", NULL, NULL);
-  if (window == NULL) {
+      glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "Test window", nullptr, nullptr);
+  if (window == nullptr) {
     std::cout << "Failed to initialize GLFW window" << std::endl;
     glfwTerminate();
     return -1;
@@ -162,30 +57,34 @@ auto main() -> int {
   VAO pyramidVAO;
   pyramidVAO.bind();
 
-  VBO pyramidVBO(pyramidVertices.data(),
-                 pyramidVertices.size() * sizeof(GLfloat));
+  VBO pyramidVBO(shape::pyramidVertices.data(),
+                 shape::pyramidVertices.size() * sizeof(GLfloat)); // NOLINT(*-narrowing-conversions)
 
   pyramidVAO.linkVBO(pyramidVBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat),
-                     (void *)0);
+                     (void *)nullptr);
   pyramidVAO.linkVBO(pyramidVBO, 1, 2, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)(3 * sizeof(GLfloat)));
   pyramidVAO.linkVBO(pyramidVBO, 2, 3, GL_FLOAT, 8 * sizeof(GLfloat),
                      (void *)(5 * sizeof(GLfloat)));
 
-  EBO pyramidEBO(pyramidIndices.data(), pyramidIndices.size() * sizeof(GLuint));
+  EBO pyramidEBO(shape::pyramidIndices.data(),
+                 shape::pyramidIndices.size() * sizeof(GLuint));
   pyramidVAO.unBind();
 
   VAO lightVAO;
   lightVAO.bind();
 
-  VBO lightVBO(lightVertices.data(), lightVertices.size() * sizeof(GLfloat));
+  VBO lightVBO(shape::lightVertices.data(),
+               shape::lightVertices.size() * sizeof(GLfloat));
 
-  lightVAO.linkVBO(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void *)0);
+  lightVAO.linkVBO(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat),
+                   (void *)nullptr);
 
-  EBO lightEBO(lightIndices.data(), lightIndices.size() * sizeof(GLfloat));
+  EBO lightEBO(shape::lightIndices.data(),
+               shape::lightIndices.size() * sizeof(GLfloat));
   lightVAO.unBind();
 
-  Texture redBrickTexture;
+  Texture redBrickTexture{};
   try {
     stbi_set_flip_vertically_on_load(true);
     redBrickTexture = Texture("resources/textures/7.png", GL_TEXTURE_2D,
@@ -219,7 +118,7 @@ auto main() -> int {
   pyramidShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
   pyramidShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
   pyramidShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-  pyramidShader.deActivate();
+  Shader::deActivate();
 
   lightShader.activate();
 
@@ -227,7 +126,7 @@ auto main() -> int {
   lightModel = glm::translate(lightModel, lightPosition);
   lightShader.setMat4("model", lightModel);
   lightShader.setVec3("lightColor", lightColor);
-  lightShader.deActivate();
+  Shader::deActivate();
 
   redBrickTexture.activate();
   redBrickTexture.bind();
@@ -242,7 +141,7 @@ auto main() -> int {
 
     /*
      * camera position is only changed via W A S D
-     * how ever camera orientation is a vector showing
+     * however camera orientation is a vector showing
      * where we are looking at
      * function "processInput" works for camera position and
      * for camera orientation(where it looks at)
@@ -252,7 +151,7 @@ auto main() -> int {
 
     /*
      * brief explanations for less confusion
-     * camera has to be updated based on an FOV and etc.
+     * camera has to be updated based on an FOV etc.
      * after all we set it to shader.
      * we could make fov near and far plane static -
      * just to make it more editable we pass them each
@@ -261,7 +160,7 @@ auto main() -> int {
 
     auto radius = 3.0f;
     auto x = radius * std::cos((glfwGetTime()));
-    auto y = radius * std::cos((glfwGetTime()));
+//    auto y = radius * std::cos((glfwGetTime()));
     auto z = radius * std::sin((glfwGetTime()));
     lightPosition = glm::vec3(x, 2.0f, z);
 
@@ -276,10 +175,10 @@ auto main() -> int {
     pyramidShader.setVec3("viewPos", camera.getCameraPosition());
     pyramidVAO.bind();
     pyramidEBO.bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
     pyramidEBO.unBind();
     pyramidVAO.unBind();
-    pyramidShader.deActivate();
+    Shader::deActivate();
 
     lightShader.activate();
     lightShader.setMat4("cameraMatrix", camera.getCameraMatrix());
@@ -289,10 +188,10 @@ auto main() -> int {
     lightShader.setMat4("model", lightModel);
     lightVAO.bind();
     lightEBO.bind();
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
     lightEBO.unBind();
     lightVAO.unBind();
-    lightShader.deActivate();
+    Shader::deActivate();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -306,3 +205,4 @@ auto main() -> int {
   glfwTerminate();
   return 0;
 }
+#pragma clang diagnostic pop
