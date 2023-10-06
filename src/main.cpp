@@ -199,6 +199,7 @@ auto main() -> int {
 
   glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
   glm::vec3 lightPosition(0.5f, 0.5f, 0.5f);
+  glm::vec3 objectColor(1.f, 1.f, 1.f);
 
   pyramidShader.activate();
   pyramidShader.setTextureUnit("tex0", 1);
@@ -207,8 +208,17 @@ auto main() -> int {
   pyramidModel = glm::translate(pyramidModel, glm::vec3(0.0f, 0.0f, 0.0f));
 
   pyramidShader.setMat4("model", pyramidModel);
-  pyramidShader.setVec3("lightColor", lightColor);
-  pyramidShader.setVec3("lightPos", lightPosition);
+  pyramidShader.setVec3("objectColor", objectColor);
+
+  pyramidShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+  pyramidShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+  pyramidShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+  pyramidShader.setFloat("material.shininess", 32.0f);
+
+  pyramidShader.setVec3("light.position", lightPosition);
+  pyramidShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+  pyramidShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+  pyramidShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
   pyramidShader.deActivate();
 
   lightShader.activate();
@@ -227,7 +237,7 @@ auto main() -> int {
   while (!glfwWindowShouldClose(window)) {
     processInput(window);
 
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /*
@@ -259,7 +269,10 @@ auto main() -> int {
 
     pyramidShader.activate();
     pyramidShader.setMat4("cameraMatrix", camera.getCameraMatrix());
-    pyramidShader.setVec3("lightPos", lightPosition);
+    pyramidShader.setVec3("light.position", lightPosition);
+    pyramidShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+    pyramidShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+    pyramidShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
     pyramidShader.setVec3("viewPos", camera.getCameraPosition());
     pyramidVAO.bind();
     pyramidEBO.bind();

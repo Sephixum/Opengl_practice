@@ -51,14 +51,6 @@ Texture::Texture(const char *image, GLenum textureType, GLenum slot,
   }
 }
 
-// auto Texture::setTextureUnit(Shader &shaderProgram, const char *uniformName,
-//                              GLint unit) const noexcept -> void {
-//
-//   shaderProgram.activate();
-//   glUniform1i(glGetUniformLocation(shaderProgram.getID(), uniformName), unit);
-//   shaderProgram.deActivate();
-// }
-
 auto Texture::bind() const noexcept -> void { glBindTexture(_type, _ID); }
 
 auto Texture::activate() const noexcept -> void {

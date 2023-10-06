@@ -11,7 +11,8 @@ private:
 
 public:
   explicit Texture() = default;
-  explicit Texture(const char *, GLenum, GLenum, GLenum);
+  explicit Texture(const char *image, GLenum textureType, GLenum slot,
+                   GLenum pixeltype);
 
   auto bind() const noexcept -> void;
   auto activate() const noexcept -> void;
