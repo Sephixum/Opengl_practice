@@ -15,6 +15,6 @@ void VAO::linkVBO(VBO &vbo, GLuint layout, GLuint numOfComponents,
 
 auto VAO::bind() const noexcept -> void { glBindVertexArray(_ID); }
 
-auto VAO::unBind() const noexcept -> void { glBindVertexArray(0); }
+auto VAO::unBind() noexcept -> void { glBindVertexArray(0); }
 
 auto VAO::deleteAttr() const noexcept -> void { glDeleteVertexArrays(1, &_ID); }

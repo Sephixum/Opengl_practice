@@ -14,6 +14,6 @@ public:
                GLenum typeOfComponenets, GLsizeiptr stride,
                void *offSet) const noexcept;
   auto bind() const noexcept -> void;
-  auto unBind() const noexcept -> void;
+  static auto unBind() noexcept -> void;
   auto deleteAttr() const noexcept -> void;
 };

@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
 #include "Camera.hpp"
 #include "EBO.hpp"
 #include "Globals.hpp"
@@ -205,4 +203,3 @@ auto main() -> int {
   glfwTerminate();
   return 0;
 }
-#pragma clang diagnostic pop
